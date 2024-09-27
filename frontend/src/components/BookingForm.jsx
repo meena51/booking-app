@@ -94,98 +94,86 @@ const BookingForm = () => {
   };
 
   return (
-    <div>
-      <h1>What do you want to book?</h1>
-      <div className="booking-options">
+    <div className="booking-container">
+      
+      <div className='button'>
         <button onClick={() => setBookingType('flight')} className={bookingType === 'flight' ? 'highlight' : ''}>Flight Only</button>
         <button onClick={() => setBookingType('hotel')} className={bookingType === 'hotel' ? 'highlight' : ''}>Hotel Only</button>
         <button onClick={() => setBookingType('hotel+flight')} className={bookingType === 'hotel+flight' ? 'highlight' : ''}>Hotel + Flight</button>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        {bookingType !== 'hotel' && (
-          <div>
-            <label>Departing From</label>
-            <select value={departingFrom} onChange={(e) => setDepartingFrom(e.target.value)}>
-              <option value="">Select country</option>
-              {countries.map((country) => (
-                <option key={country.code} value={country.code}>
-                  {country.name} ({country.code})
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-        <div>
-          <label>Going To</label>
-          <select value={goingTo} onChange={(e) => setGoingTo(e.target.value)}>
-            <option value="">Select country</option>
-            {countries.map((country) => (
-              <option key={country.code} value={country.code}>
-                {country.name} ({country.code})
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label>Start Date</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-        </div>
-        <div>
-          <label>End Date</label>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        </div>
-
-        {(bookingType === 'hotel' || bookingType === 'hotel+flight') && (
-          <div>
-            <label>Rooms</label>
-            <button type="button" onClick={() => handleRoomsChange(-1)}>-</button>
-            <span>{rooms}</span>
-            <button type="button" onClick={() => handleRoomsChange(1)}>+</button>
-          </div>
-        )}
-
-        {roomDetails.map((room, index) => (
-          <div key={index}>
-            <div>
-              <label>Adults</label>
-              <button type="button" onClick={() => decrement('adults')}>-</button>
-              <span>{room.adults}</span>
-              <button type="button" onClick={() => increment('adults')}>+</button>
-            </div>
-            <div>
-              <label>Children</label>
-              <button type="button" onClick={() => decrement('children')}>-</button>
-              <span>{room.children}</span>
-              <button type="button" onClick={() => increment('children')}>+</button>
-              {room.children === '6+' && <p>The number of children cannot exceed 6.</p>}
-            </div>
-
-            {/* Show children's ages if children are present */}
-            {room.children > 0 && (
-              <div>
-                {Array.from({ length: room.children }, (_, childIndex) => (
-                  <div key={childIndex}>
-                    <label>Child {childIndex + 1} Age</label>
-                    <select
-                      value={room.childrenAges[childIndex] || ''}
-                      onChange={(e) => handleChildAgeChange(index, childIndex, e.target.value)}
-                    >
-                      <option value="">Select age</option>
-                      <option value="Under 2">Under 2</option>
-                      <option value="2 to 17">2 to 17</option>
-                    </select>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+      <form onSubmit={handleSubmit} className="form-container">
+  <div className="form-row">
+    {bookingType !== 'hotel' && (
+      <div className="form-group">
+        <label>Departing From</label>
+        <select value={departingFrom} onChange={(e) => setDepartingFrom(e.target.value)}>
+          <option value="">Select country</option>
+          {countries.map((country) => (
+            <option key={country.code} value={country.code}>
+              {country.name} ({country.code})
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+    
+    <div className="form-group">
+      <label>Going To</label>
+      <select value={goingTo} onChange={(e) => setGoingTo(e.target.value)}>
+        <option value="">Select country</option>
+        {countries.map((country) => (
+          <option key={country.code} value={country.code}>
+            {country.name} ({country.code})
+          </option>
         ))}
+      </select>
+    </div>
+  </div>
 
-        {warningMessage && <p style={{ color: 'red' }}>{warningMessage}</p>}
+  <div className="form-row">
+    <div className="form-group">
+      <label>Start Date</label>
+      <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+    </div>
+    
+    <div className="form-group">
+      <label>End Date</label>
+      <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+    </div>
+  </div>
 
-        <button type="submit">Submit</button>
-      </form>
+  {(bookingType === 'hotel' || bookingType === 'hotel+flight') && (
+    <div className="form-row">
+      <div className="form-group">
+        <label>Rooms</label>
+        <button type="button" onClick={() => handleRoomsChange(-1)}>-</button>
+        <span>{rooms}</span>
+        <button type="button" onClick={() => handleRoomsChange(1)}>+</button>
+      </div>
+    </div>
+  )}
+
+  {roomDetails.map((room, index) => (
+    <div key={index} className="form-row">
+      <div className="form-group">
+        <label>Adults</label>
+        <button type="button" onClick={() => decrement('adults')}>-</button>
+        <span>{room.adults}</span>
+        <button type="button" onClick={() => increment('adults')}>+</button>
+      </div>
+      
+      <div className="form-group">
+        <label>Children</label>
+        <button type="button" onClick={() => decrement('children')}>-</button>
+        <span>{room.children}</span>
+        <button type="button" onClick={() => increment('children')}>+</button>
+        {room.children === '6+' && <p>The number of children cannot exceed 6.</p>}
+      </div>
+    </div>
+  ))}
+</form>
+
 
       {/* Popup for editing room details */}
       {showPopup && (
