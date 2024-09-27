@@ -1,0 +1,61 @@
+/* Dialog width adjustment */
+.dialogBox {
+    width: 50% !important; /* Set width to 50% */
+  }
+  
+  /* Layout for each room's controls */
+  .room-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Room number section */
+  .room-number h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  /* Adults and children controls */
+  .adults-control, .children-control {
+    display: flex;
+    align-items: center;
+  }
+  
+  .adults-control span, .children-control span {
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  .adults-control button, .children-control button {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .adults-control button:hover, .children-control button:hover {
+    background-color: #ccc;
+  }
+  
+  /* Child age dropdown */
+  .child-age {
+    margin-left: 20px;
+  }
+  
+  .child-age label {
+    margin-right: 5px;
+    font-size: 16px;
+  }
+  
+  .child-age select {
+    padding: 5px;
+    font-size: 14px;
+  }
+  

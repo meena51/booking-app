@@ -85,6 +85,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
   transform: translateY(2px); /* Button moves down slightly */
 }
+.custom-btn.selected {
+  background-color: #2980b9; /* Highlight color for the selected button */
+  color: #fff; /* Change text color for contrast */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly larger shadow */
+}
 
 /* Button focus outline */
 .custom-btn:focus {
