@@ -5,11 +5,13 @@ import './BookingContainer.css';
 import { format } from 'date-fns';
 
 const BookingContainer = () => {
+  const today = new Date();
+  const formattedDate = format(today, 'yyyy-MM-dd')
   const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(new Date(today.getDate()+4));
   const [bookingOption, setBookingOption] = useState('Hotel+Flight');
 
   const handleIncrement = (type) => {
@@ -125,7 +127,7 @@ const BookingContainer = () => {
                 label="Start Date"
                 type="date"
                 InputLabelProps={{ style: { color: '#fff' } }}
-                InputProps={{ style: { color: '#fff' } }}
+                InputProps={{ style: { color: '#fff' }, inputProps: { min: formattedDate } }}
                 margin="normal"
                 variant="outlined"
                 value={format(startDate, 'yyyy-MM-dd')}
@@ -148,7 +150,7 @@ const BookingContainer = () => {
                 label="End Date"
                 type="date"
                 InputLabelProps={{ style: { color: '#fff' } }}
-                InputProps={{ style: { color: '#fff' } }}
+                InputProps={{ style: { color: '#fff' }, inputProps: { min: formattedDate } }}
                 fullWidth
                 margin="normal"
                 variant="outlined"
@@ -194,21 +196,22 @@ const BookingContainer = () => {
             )}
 
             {/* Rooms, Adults, and Children fields */}
-            <Grid item xs={12} sm={3}>
-              <div className="counter">
-                <span>Rooms</span>
-                <div className="counter-buttons">
-                  <IconButton onClick={() => handleDecrement('rooms')} sx={{ color: '#fff' }}>
-                    <Remove />
-                  </IconButton>
-                  <span>{rooms}</span>
-                  <IconButton onClick={() => handleIncrement('rooms')} sx={{ color: '#fff' }}>
-                    <Add />
-                  </IconButton>
-                </div>
-              </div>
-            </Grid>
-
+            {bookingOption !== 'Flight' && (
+  <Grid item xs={12} sm={3}>
+    <div className="counter">
+      <span>Rooms</span>
+      <div className="counter-buttons">
+        <IconButton onClick={() => handleDecrement('rooms')} sx={{ color: '#fff' }}>
+          <Remove />
+        </IconButton>
+        <span>{rooms}</span>
+        <IconButton onClick={() => handleIncrement('rooms')} sx={{ color: '#fff' }}>
+          <Add />
+        </IconButton>
+      </div>
+    </div>
+  </Grid>
+)}
             <Grid item xs={12} sm={3}>
               <div className="counter">
                 <span>Adults</span>
