@@ -66,11 +66,22 @@ const handleClearRooms = () => {
 
 //Increment or decrement adults
 const handleIncrementAdults = (index) => {
-  const updatedRoomDetails = roomDetails.map((room, i) =>
-    i === index ? { ...room, adults: room.adults + 1 } : room
-  );
+  const updatedRoomDetails = roomDetails.map((room, i) => {
+    // Check if this is the room being updated and if adults count is less than 8
+    if (i === index) {
+      if (room.adults > 8) {
+        // If adults count is already 8 or more, do not increment
+        return room;
+      }
+      // Otherwise, increment adults count
+      return { ...room, adults: room.adults + 1 };
+    }
+    return room;
+  });
+
   setRoomDetails(updatedRoomDetails);
 };
+
 
 const handleDecrementAdults = (index) => {
   const updatedRoomDetails = roomDetails.map((room, i) =>

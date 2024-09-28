@@ -25,10 +25,18 @@ const DialogBox = ({ open, handleClose, roomDetails, handleIncrementAdults, hand
 
             {/* Adults */}
             <div className="adults-control">
-              <span>Adults: {room.adults} </span>
-              <button onClick={() => handleIncrementAdults(index)}>+</button>
-              <button onClick={() => handleDecrementAdults(index)}>-</button>
-            </div>
+  <span>Adults: {room.adults} </span>
+  <button onClick={() => handleIncrementAdults(index)}>+</button>
+  <button onClick={() => handleDecrementAdults(index)}>-</button>
+
+  {/* Error message */}
+  {room.adults > 8 && (
+    <span style={{ color: 'red', marginLeft: '10px' }}>
+      Adults should not exceed 8
+    </span>
+  )}
+</div>
+
 
             {/* Children */}
             <div className="children-control">
@@ -47,7 +55,15 @@ const DialogBox = ({ open, handleClose, roomDetails, handleIncrementAdults, hand
                     <>
                       <option value="">Select Age</option>
                       <option value="Under 2">Under 2</option>
-                      <option value="2 to 17">2 to 17</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
                     </>
                   ))}
                   {bookingOption!=="Hotel" && ((roomDetails.length > 1 || room.children > 0) && (
