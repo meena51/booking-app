@@ -1,17 +1,5 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Autocomplete,
-  TextField,
-  Container,
-  IconButton,
-  Typography,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Grid, Autocomplete, TextField, Container, IconButton, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 import "./BookingContainer.css";
 import { format } from "date-fns";
@@ -33,7 +21,6 @@ const BookingContainer = () => {
     { adults: 1, children: 0, childAges: [] },
   ]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [error, setError] = useState(false);
   const [departingFrom, setDepartingFrom] = useState("");
   const [goingTo, setGoingTo] = useState("");
   const [openDialog, setOpenDialog] = useState(false); // Dialog control
@@ -182,9 +169,9 @@ const BookingContainer = () => {
     if (bookingOption === "Hotel") {
       if (goingTo.trim() !== "") {
         return true;
-      } // No fields required for Hotel option
+      } 
     }
-    
+
     // For Flight option, check if "Departing From" and other required fields are filled
     if (bookingOption === "Flight" || bookingOption === "Hotel+Flight") {
       // Ensure all required fields are filled
@@ -204,7 +191,6 @@ const BookingContainer = () => {
       let url = "";
 
       if (bookingOption === "Flight") {
-        
         url = `/flights.php?`;
         url += `fromLocation=${encodeURIComponent(departingFrom)}`; // Encode and append departing location
         url += `&toLocation=${encodeURIComponent(goingTo)}`; // Encode and append destination
@@ -223,6 +209,7 @@ const BookingContainer = () => {
         url += `&toLocation=${encodeURIComponent(goingTo)}`;
         url += `&fd=${startDate}`; // Flight departure date
         url += `&td=${endDate}`;
+        url +=`&searchflights`
       }
 
       // Perform the redirect
@@ -402,7 +389,6 @@ const BookingContainer = () => {
             </Grid>
             <Grid item xs={12} lg={4} sm={12} md={6}>
               <TextField
-              
                 label="End Date"
                 type="date"
                 InputLabelProps={{ style: { color: "#fff" } }}
