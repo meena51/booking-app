@@ -14,7 +14,7 @@ const BookingContainer = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(new Date(today.getDate() + 4));
+  const [endDate, setEndDate] = useState(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
   const [bookingOption, setBookingOption] = useState("Hotel+Flight");
   const [open, setOpen] = useState(false);
   const [roomDetails, setRoomDetails] = useState([
@@ -34,20 +34,28 @@ const BookingContainer = () => {
 
   const handleIncrement = (type) => {
     if (type === "rooms") {
-      setRooms(rooms + 1);
+      
       handleClickOpen();
     }
-    if (type === "adults") setAdults(adults + 1);
-    if (type === "children") setChildren(children + 1);
+    if (type === "adults") {
+      handleClickOpen();
+    }
+    if (type === "children") {
+      handleClickOpen();
+    };
   };
 
   const handleDecrement = (type) => {
     if (type === "rooms" && rooms > 1) {
-      setRooms(rooms - 1);
+      
       handleClickOpen();
     }
-    if (type === "adults" && adults > 1) setAdults(adults - 1);
-    if (type === "children" && children > 0) setChildren(children - 1);
+    if (type === "adults" && adults > 1) {
+      handleClickOpen();
+    }
+    if (type === "children" && children > 0) {
+      handleClickOpen();
+    };
   };
 
   const handleBookingOptionChange = (option) => {
