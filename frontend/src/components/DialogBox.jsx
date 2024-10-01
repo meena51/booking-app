@@ -13,12 +13,10 @@ const DialogBox = ({
   open,
   handleClose,
   roomDetails,
-  handleIncrementAdults,
-  handleDecrementAdults,
+  
   handleAddRoom,
   handleConfirm,
-  handleIncrementChildren,
-  handleDecrementChildren,
+  
   handleClearRooms,
   bookingOption,
   handleChildAgeChange,
@@ -97,10 +95,8 @@ const DialogBox = ({
   </select>
 </div>
 
-            {room.children > 6 && (
-              <span style={{ color: "red", marginLeft: "10px" }}>
-                Children should not exceed 6
-              </span>
+            {room.children > 5 && (
+              <ErrorDialog open={openDialog} setOpenDialog={setOpenDialog} dialogMessage="Children count should not exceed 6"/>
             )}
 
             {/* ChildAge Dropdowns (Shown when children > 0) */}
@@ -185,6 +181,7 @@ const DialogBox = ({
         <Button onClick={handleConfirm} color="primary">
           Save
         </Button>
+        
       </DialogActions>
     </Dialog>
   );

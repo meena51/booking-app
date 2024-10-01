@@ -24,7 +24,8 @@ const BookingContainer = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [departingFrom, setDepartingFrom] = useState("");
   const [goingTo, setGoingTo] = useState("");
-  const [openDialog, setOpenDialog] = useState(false); // Dialog control
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openChildDialog,setOpenChildDialog] = useState(false) // Dialog control
   
   const countries = [
     { label: "New York", code: "NY" },
@@ -83,31 +84,31 @@ const BookingContainer = () => {
   };
 
   //Increment or decrement adults
-  const handleIncrementAdults = (index) => {
-    const updatedRoomDetails = roomDetails.map((room, i) => {
-      // Check if this is the room being updated and if adults count is less than 8
-      if (i === index) {
-        if (room.adults >= 8) {
-          // If adults count is already 8 or more, do not increment
-          return room;
-        }
-        // Otherwise, increment adults count
-        return { ...room, adults: room.adults +1 };
-      }
-      return room;
-    });
+  // const handleIncrementAdults = (index) => {
+  //   const updatedRoomDetails = roomDetails.map((room, i) => {
+  //     // Check if this is the room being updated and if adults count is less than 8
+  //     if (i === index) {
+  //       if (room.adults >= 8) {
+  //         // If adults count is already 8 or more, do not increment
+  //         return room;
+  //       }
+  //       // Otherwise, increment adults count
+  //       return { ...room, adults: room.adults +1 };
+  //     }
+  //     return room;
+  //   });
 
-    setRoomDetails(updatedRoomDetails);
-  };
+  //   setRoomDetails(updatedRoomDetails);
+  // };
 
-  const handleDecrementAdults = (index) => {
-    const updatedRoomDetails = roomDetails.map((room, i) =>
-      i === index && room.adults > 1
-        ? { ...room, adults: room.adults - 1 }
-        : room
-    );
-    setRoomDetails(updatedRoomDetails);
-  };
+  // const handleDecrementAdults = (index) => {
+  //   const updatedRoomDetails = roomDetails.map((room, i) =>
+  //     i === index && room.adults > 1
+  //       ? { ...room, adults: room.adults - 1 }
+  //       : room
+  //   );
+  //   setRoomDetails(updatedRoomDetails);
+  // };
   
 const handleAdultsChange = (e, index) => {
   const selectedValue = e.target.value === "9" ? 9 : parseInt(e.target.value, 10);
@@ -116,7 +117,7 @@ const handleAdultsChange = (e, index) => {
     if (i === index) {
       // Open dialog if the selected value exceeds 8
       if (selectedValue > 8) {
-        setOpenDialog(true);
+        setOpenChildDialog(true);
       }
       return { ...room, adults: selectedValue }; // Update the adults value correctly
     }
@@ -129,6 +130,9 @@ const handleChildrenChange = (e, index) => {
   const selectedValue = parseInt(e.target.value, 10); // Get the selected value
   const updatedRoomDetails = roomDetails.map((room, i) => {
     if (i === index) {
+      if(selectedValue>5){
+        setOpenChildDialog(true)
+      }
       const updatedChildren = selectedValue;
       const updatedChildAges =
         updatedChildren > room.children
@@ -150,31 +154,31 @@ const handleChildrenChange = (e, index) => {
 
   
   //handle increment or decrmeent children
-  const handleIncrementChildren = (index) => {
-    const updatedRoomDetails = roomDetails.map((room, i) =>
-      i === index
-        ? {
-            ...room,
-            children: room.children + 1,
-            childAges: [...room.childAges, null],
-          }
-        : room
-    );
-    setRoomDetails(updatedRoomDetails);
-  };
+  // const handleIncrementChildren = (index) => {
+  //   const updatedRoomDetails = roomDetails.map((room, i) =>
+  //     i === index
+  //       ? {
+  //           ...room,
+  //           children: room.children + 1,
+  //           childAges: [...room.childAges, null],
+  //         }
+  //       : room
+  //   );
+  //   setRoomDetails(updatedRoomDetails);
+  // };
 
-  const handleDecrementChildren = (index) => {
-    const updatedRoomDetails = roomDetails.map((room, i) =>
-      i === index && room.children > 0
-        ? {
-            ...room,
-            children: room.children - 1,
-            childAges: room.childAges.slice(0, -1),
-          }
-        : room
-    );
-    setRoomDetails(updatedRoomDetails);
-  };
+  // const handleDecrementChildren = (index) => {
+  //   const updatedRoomDetails = roomDetails.map((room, i) =>
+  //     i === index && room.children > 0
+  //       ? {
+  //           ...room,
+  //           children: room.children - 1,
+  //           childAges: room.childAges.slice(0, -1),
+  //         }
+  //       : room
+  //   );
+  //   setRoomDetails(updatedRoomDetails);
+  // };
   //handleCHild Age
   const handleChildAgeChange = (roomIndex, childIndex, age) => {
     const updatedRoomDetails = roomDetails.map((room, i) => {
@@ -199,10 +203,9 @@ const handleChildrenChange = (e, index) => {
     );
     const totalPeople = totalAdults + totalChildren;
     if (totalPeople > 8) {
+      setOpenChildDialog(true)
       setErrorMessage("Number of People should not exceed 8");
-      {
-        alert(errorMessage);
-      }
+      
     }
     else{
       setAdults(totalAdults);
@@ -591,16 +594,17 @@ const handleChildrenChange = (e, index) => {
           open={open}
           handleClose={handleClose}
           roomDetails={roomDetails}
-          handleIncrementAdults={handleIncrementAdults}
-          handleDecrementAdults={handleDecrementAdults}
+          // handleIncrementAdults={handleIncrementAdults}
+          // handleDecrementAdults={handleDecrementAdults}
           handleAddRoom={handleAddRoom}
           handleConfirm={handleConfirm}
-          handleIncrementChildren={handleIncrementChildren}
-          handleDecrementChildren={handleDecrementChildren}
+          // handleIncrementChildren={handleIncrementChildren}
+          // handleDecrementChildren={handleDecrementChildren}
           handleClearRooms={handleClearRooms}
           bookingOption={bookingOption}
           handleChildAgeChange={handleChildAgeChange}
           handleAdultsChange={handleAdultsChange}
+          openDialog={openChildDialog} setOpenDialog={setOpenChildDialog}
           handleChildrenChange={handleChildrenChange}
         />
 
@@ -622,6 +626,7 @@ const handleChildrenChange = (e, index) => {
           <a href="" style={{ color: "#fff" }}>
             888.444.5555
           </a>
+          <ErrorDialog open={openChildDialog} setOpenDialog={setOpenChildDialog} dialogMessage="Total people cannot exceed 8"/>
           <button className="custom-btn" onClick={handleSearch}>
             {bookingOption === "Hotel" && "View Hotels"}
             {bookingOption === "Flight" && "Search"}
