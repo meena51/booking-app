@@ -2,6 +2,9 @@
 .dialogBox {
     width: 50% !important; /* Set width to 50% */
   }
+  .dialog {
+    width: 70% !important; /* Set width to 50% */
+  }
   
   /* Layout for each room's controls */
   .room-details {

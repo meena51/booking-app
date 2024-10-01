@@ -5,6 +5,7 @@ import "./BookingContainer.css";
 import { format } from "date-fns";
 
 import DialogBox from "./DialogBox";
+import ErrorDialog from "./ErrorDialog";
 
 const BookingContainer = () => {
   const today = new Date();
@@ -24,8 +25,7 @@ const BookingContainer = () => {
   const [departingFrom, setDepartingFrom] = useState("");
   const [goingTo, setGoingTo] = useState("");
   const [openDialog, setOpenDialog] = useState(false); // Dialog control
-  const [dialogMessage, setDialogMessage] = useState("");
-
+  
   const countries = [
     { label: "New York", code: "NY" },
     { label: "India", code: "IN" },
@@ -75,7 +75,7 @@ const BookingContainer = () => {
   // Adding and removing rooms
   const handleAddRoom = () => {
     setRooms(rooms + 1);
-    setRoomDetails([...roomDetails, { adults: 1, children: 0, childAges: [] }]);
+    setRoomDetails([...roomDetails, { adults: 0, children: 0, childAges: [] }]);
   };
   // Function to clear room details
   const handleClearRooms = () => {
@@ -92,7 +92,7 @@ const BookingContainer = () => {
           return room;
         }
         // Otherwise, increment adults count
-        return { ...room, adults: room.adults + 1 };
+        return { ...room, adults: room.adults +1 };
       }
       return room;
     });
@@ -108,6 +108,47 @@ const BookingContainer = () => {
     );
     setRoomDetails(updatedRoomDetails);
   };
+  
+const handleAdultsChange = (e, index) => {
+  const selectedValue = e.target.value === "9" ? 9 : parseInt(e.target.value, 10);
+
+  const updatedRoomDetails = roomDetails.map((room, i) => {
+    if (i === index) {
+      // Open dialog if the selected value exceeds 8
+      if (selectedValue > 8) {
+        setOpenDialog(true);
+      }
+      return { ...room, adults: selectedValue }; // Update the adults value correctly
+    }
+    return room;
+  });
+
+  setRoomDetails(updatedRoomDetails);
+};
+const handleChildrenChange = (e, index) => {
+  const selectedValue = parseInt(e.target.value, 10); // Get the selected value
+  const updatedRoomDetails = roomDetails.map((room, i) => {
+    if (i === index) {
+      const updatedChildren = selectedValue;
+      const updatedChildAges =
+        updatedChildren > room.children
+          ? [...room.childAges, ...Array(updatedChildren - room.children).fill(null)] // Add nulls for new children
+          : room.childAges.slice(0, updatedChildren); // Remove extra child ages if children decrease
+
+      return {
+        ...room,
+        children: updatedChildren,
+        childAges: updatedChildAges,
+      };
+    }
+    return room;
+  });
+
+  setRoomDetails(updatedRoomDetails); // Update the state with the new room details
+};
+
+
+  
   //handle increment or decrmeent children
   const handleIncrementChildren = (index) => {
     const updatedRoomDetails = roomDetails.map((room, i) =>
@@ -163,9 +204,11 @@ const BookingContainer = () => {
         alert(errorMessage);
       }
     }
-    setAdults(totalAdults);
+    else{
+      setAdults(totalAdults);
     setChildren(totalChildren);
     setRooms(roomDetails.length);
+    }
 
     handleClose(); // Close the dialog
   };
@@ -223,7 +266,7 @@ const BookingContainer = () => {
       // Perform the redirect
       window.location.href = url; // Redirect to constructed URL
     } else {
-      setDialogMessage("Please fill in all required fields."); // Set error message
+      // Set error message
       setOpenDialog(true); // Open dialog
     }
   };
@@ -557,6 +600,8 @@ const BookingContainer = () => {
           handleClearRooms={handleClearRooms}
           bookingOption={bookingOption}
           handleChildAgeChange={handleChildAgeChange}
+          handleAdultsChange={handleAdultsChange}
+          handleChildrenChange={handleChildrenChange}
         />
 
         {/* Second Column: Search Button and Contact Info */}
@@ -582,17 +627,8 @@ const BookingContainer = () => {
             {bookingOption === "Flight" && "Search"}
             {bookingOption === "Hotel+Flight" && "View Packages"}
           </button>
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>Error</DialogTitle>
-            <DialogContent>
-              <p>{dialogMessage}</p> {/* Display the error message */}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(false)} color="primary">
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <ErrorDialog open={openDialog} setOpenDialog={setOpenDialog} dialogMessage="Please fill all the required details"/>
+          
         </Grid>
       </Grid>
     </Container>
