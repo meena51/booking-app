@@ -21,7 +21,7 @@ const DialogBox = ({
   bookingOption,
   handleChildAgeChange,
   handleAdultsChange,
-  openDialog, setOpenDialog,
+  openChildDialog, setOpenChildDialog,
   handleChildrenChange
 }) => {
   // const [openDialog, setOpenDialog] = useState(false);
@@ -70,9 +70,9 @@ const DialogBox = ({
     
 
               {/* Error message if adults exceed 8 */}
-              {room.adults > 8 && (
+              {room.adults >= 8 && (
                 
-              <ErrorDialog open={openDialog} setOpenDialog={setOpenDialog} dialogMessage="Adults should not exceed 8"/>
+              <ErrorDialog open={openChildDialog} setOpenDialog={setOpenChildDialog} dialogMessage="Adults should not exceed 8"/>
                 
               )}
             </div>
@@ -93,11 +93,12 @@ const DialogBox = ({
     {/* Add an option for 9+ */}
     <option value="6">6+</option>
   </select>
+  {room.children > 5 && (
+              <ErrorDialog open={openChildDialog} setOpenDialog={setOpenChildDialog} dialogMessage="Children count should not exceed 6"/>
+            )}
 </div>
 
-            {room.children > 5 && (
-              <ErrorDialog open={openDialog} setOpenDialog={setOpenDialog} dialogMessage="Children count should not exceed 6"/>
-            )}
+            
 
             {/* ChildAge Dropdowns (Shown when children > 0) */}
             {room.children > 0 && (
@@ -181,6 +182,7 @@ const DialogBox = ({
         <Button onClick={handleConfirm} color="primary">
           Save
         </Button>
+        
         
       </DialogActions>
     </Dialog>

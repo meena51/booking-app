@@ -18,10 +18,11 @@ const BookingContainer = () => {
   const [endDate, setEndDate] = useState(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
   const [bookingOption, setBookingOption] = useState("Hotel+Flight");
   const [open, setOpen] = useState(false);
+  const [dateDialog,setDateDialog] = useState(false)
   const [roomDetails, setRoomDetails] = useState([
     { adults: 1, children: 0, childAges: [] },
   ]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [totalDialog, setTotalDialog] = useState(false);
   const [departingFrom, setDepartingFrom] = useState("");
   const [goingTo, setGoingTo] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
@@ -32,7 +33,7 @@ const BookingContainer = () => {
     { label: "India", code: "IN" },
     { label: "Canada", code: "CA" },
   ];
-
+  
   const handleIncrement = (type) => {
     if (type === "rooms") {
       
@@ -69,7 +70,20 @@ const BookingContainer = () => {
       setRoomDetails([{ adults: 1, children: 0 }]); // Customize for Hotel+Flight
     }
   };
-
+  const handleEndDateChange = (e) => {
+    setEndDate(new Date(e.target.value))
+    if(endDate<=startDate){
+      setDateDialog(true)
+      setEndDate(new Date(startDate.getTime() + 4 * 24 * 60 * 60 * 1000))
+    }
+    // const selectedEndDate = new Date(e.target.value);
+    // const selectedStartDate = new Date(startDate);
+    // if (selectedEndDate >= selectedStartDate) {
+    //   setEndDate(e.target.value);
+    // } else {
+    //   setDateDialog(true)
+    // }
+  };
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -118,6 +132,7 @@ const handleAdultsChange = (e, index) => {
       // Open dialog if the selected value exceeds 8
       if (selectedValue > 8) {
         setOpenChildDialog(true);
+        return {...room, adults:selectedValue-1}
       }
       return { ...room, adults: selectedValue }; // Update the adults value correctly
     }
@@ -196,21 +211,20 @@ const handleChildrenChange = (e, index) => {
 
   //save button
   const handleConfirm = () => {
-    const totalAdults = roomDetails.reduce((acc, room) => acc + room.adults, 0);
+    const totalAdults = roomDetails.reduce((acc, room) => acc + room.adults, 0)-1;
     const totalChildren = roomDetails.reduce(
       (acc, room) => acc + room.children,
       0
     );
-    const totalPeople = totalAdults + totalChildren;
+    
+    const totalPeople = totalAdults + totalChildren ;
     if (totalPeople > 8) {
-      setOpenChildDialog(true)
-      setErrorMessage("Number of People should not exceed 8");
-      
+       setTotalDialog(true) 
     }
     else{
       setAdults(totalAdults);
-    setChildren(totalChildren);
-    setRooms(roomDetails.length);
+      setChildren(totalChildren);
+      setRooms(roomDetails.length);
     }
 
     handleClose(); // Close the dialog
@@ -241,6 +255,9 @@ const handleChildrenChange = (e, index) => {
   };
   const handleSearch = (e) => {
     e.preventDefault(); // Prevent default form submission
+    if(startDate>endDate){
+      setDateDialog(true)
+    }
     if (allFieldsFilled()) {
       let url = "";
 
@@ -406,6 +423,7 @@ const handleChildrenChange = (e, index) => {
                           },
                       }}
                     />
+
                   )}
                 />
               </Grid>
@@ -454,7 +472,7 @@ const handleChildrenChange = (e, index) => {
                 margin="normal"
                 variant="outlined"
                 value={format(endDate, "yyyy-MM-dd")}
-                onChange={(e) => setEndDate(new Date(e.target.value))}
+                onChange={handleEndDateChange}
                 sx={{
                   "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
                     borderColor: "white",
@@ -469,6 +487,7 @@ const handleChildrenChange = (e, index) => {
                     },
                 }}
               />
+              <ErrorDialog open={dateDialog} setOpenDialog={setDateDialog} dialogMessage="End date can’t be prior to start date"/>
             </Grid>
 
             {/* Display 'Going To' field in the correct position if Hotel+Flight or Flight is selected */}
@@ -604,10 +623,10 @@ const handleChildrenChange = (e, index) => {
           bookingOption={bookingOption}
           handleChildAgeChange={handleChildAgeChange}
           handleAdultsChange={handleAdultsChange}
-          openDialog={openChildDialog} setOpenDialog={setOpenChildDialog}
+          openChildDialog={openChildDialog} setOpenChildDialog={setOpenChildDialog}
           handleChildrenChange={handleChildrenChange}
         />
-
+        <ErrorDialog open={totalDialog} setOpenDialog={setTotalDialog} dialogMessage="Total should not exceed 8"/>
         {/* Second Column: Search Button and Contact Info */}
         <Grid
           item
@@ -626,12 +645,13 @@ const handleChildrenChange = (e, index) => {
           <a href="" style={{ color: "#fff" }}>
             888.444.5555
           </a>
-          <ErrorDialog open={openChildDialog} setOpenDialog={setOpenChildDialog} dialogMessage="Total people cannot exceed 8"/>
+          
           <button className="custom-btn" onClick={handleSearch}>
             {bookingOption === "Hotel" && "View Hotels"}
             {bookingOption === "Flight" && "Search"}
             {bookingOption === "Hotel+Flight" && "View Packages"}
           </button>
+          
           <ErrorDialog open={openDialog} setOpenDialog={setOpenDialog} dialogMessage="Please fill all the required details"/>
           
         </Grid>
