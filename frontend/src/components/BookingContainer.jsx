@@ -76,14 +76,9 @@ const BookingContainer = () => {
       setDateDialog(true)
       setEndDate(new Date(startDate.getTime() + 4 * 24 * 60 * 60 * 1000))
     }
-    // const selectedEndDate = new Date(e.target.value);
-    // const selectedStartDate = new Date(startDate);
-    // if (selectedEndDate >= selectedStartDate) {
-    //   setEndDate(e.target.value);
-    // } else {
-    //   setDateDialog(true)
-    // }
+    
   };
+  
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -489,7 +484,7 @@ const handleChildrenChange = (e, index) => {
               />
               <ErrorDialog open={dateDialog} setOpenDialog={setDateDialog} dialogMessage="End date can’t be prior to start date"/>
             </Grid>
-
+      
             {/* Display 'Going To' field in the correct position if Hotel+Flight or Flight is selected */}
             {bookingOption !== "Hotel" && (
               <Grid item xs={12} lg={3} sm={12} md={6}>
